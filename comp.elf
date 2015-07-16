@@ -1,0 +1,53 @@
+nat  : type.
+z    : nat.
+s    : nat -> nat.
+
+term : type.
+
+ax   : term.
+unit : term.
+
+void : term.
+
+pi   : term -> (term -> term) -> term.
+lam  : (term -> term) -> term.
+ap   : term -> term -> term.
+
+sig  : term -> (term -> term) -> term.
+pair : term -> term -> term.
+fst  : term -> term.
+snd  : term -> term.
+
+eq   : term -> term -> term -> term.
+refl : term.
+
+univ : nat -> term.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+=> : term -> term -> type. %infix none 1 =>.
+
+=>/ax   : ax => ax.
+=>/unit : unit => unit.
+
+=>/void : void => void.
+
+=>/pi   : pi A F => pi A F.
+=>/lam  : lam F => lam F.
+=>/ap   : ap F A => V
+           <- F => lam FV
+           <- FV A => V.
+
+=>/sig  : sig A F => sig A F.
+=>/pair : pair A B => pair A B.
+=>/fst  : fst M => V
+           <- M => pair L R
+           <- L => V.
+=>/fst  : snd M => V
+           <- M => pair L R
+           <- R => V.
+
+=>/eq   : eq A B T => eq A B T.
+=>/refl : refl => refl.
+
+=>/univ : univ N => univ N.
