@@ -21,33 +21,63 @@ snd  : term -> term.
 eq   : term -> term -> term -> term.
 refl : term.
 
+sum  : term -> term -> term.
+inl  : term -> term.
+inr  : term -> term.
+dec  : term -> (term -> term) -> (term -> term) -> term.
+
 univ : nat -> term.
+
+canon : type.
+cax   : canon.
+cunit : canon.
+cvoid : canon.
+cpi   : term -> (term -> term) -> canon.
+clam  : (term -> term) -> canon.
+csig  : term -> (term -> term) -> canon.
+cpair : term -> term -> canon.
+ceq   : term -> term -> term -> canon.
+crefl : canon.
+csum  : term -> term -> canon.
+cinl  : term -> canon.
+cinr  : term -> canon.
+cuniv : nat -> canon.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-=> : term -> term -> type. %infix none 1 =>.
+=> : term -> canon -> type. %infix none 1 =>.
 
-=>/ax   : ax => ax.
-=>/unit : unit => unit.
+=>/ax   : ax => cax.
+=>/unit : unit => cunit.
 
-=>/void : void => void.
+=>/void : void => cvoid.
 
-=>/pi   : pi A F => pi A F.
-=>/lam  : lam F => lam F.
+=>/pi   : pi A F => cpi A F.
+=>/lam  : lam F => clam F.
 =>/ap   : ap F A => V
-           <- F => lam FV
+           <- F => clam FV
            <- FV A => V.
 
-=>/sig  : sig A F => sig A F.
-=>/pair : pair A B => pair A B.
+=>/sig  : sig A F => csig A F.
+=>/pair : pair A B => cpair A B.
 =>/fst  : fst M => V
-           <- M => pair L R
+           <- M => cpair L R
            <- L => V.
 =>/fst  : snd M => V
-           <- M => pair L R
+           <- M => cpair L R
            <- R => V.
 
-=>/eq   : eq A B T => eq A B T.
-=>/refl : refl => refl.
+=>/eq   : eq A B T => ceq A B T.
+=>/refl : refl => crefl.
 
-=>/univ : univ N => univ N.
+=>/univ : univ N => cuniv N.
+
+=>/sum  : sum A B => csum A B.
+=>/inl  : inl A => cinl A.
+=>/inr  : inr A => cinr A.
+=>/dec1 : dec A F G => V
+           <- A => cinl AV
+           <- F AV => V.
+=>/dec2 : dec A F G => V
+           <- A => cinr BV
+           <- G AV => V.
