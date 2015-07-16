@@ -1,0 +1,12 @@
+equal   : term -> term -> term -> type.
+is-type : term -> type.
+
+judge  : type.
+`equal : term -> term -> term -> judge.
+`type  : term -> judge.
+
+hjudge   : type.
+functional : term -> (term -> hjudge) -> type.
+
+hjudge/z : judge -> hjudge.
+hjudge/s : {T : term}{f : term -> hjudge} functional T F -> hjudge.
