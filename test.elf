@@ -6,3 +6,5 @@
             (! (pi unit [x] unit)).
 %solve D : nil >> `equal (! (ap (lam [x] x) (lam [x] x))) (! (lam [x] x))
             (! (pi unit [x] unit)).
+%abbrev - : nil , A >> `equal (@ [x] ! x) (@ [x] ! x) (@ [x] ! unit) =
+     >>/@ ([x][y][x'][y'][_][_][D] D) spread/equal.

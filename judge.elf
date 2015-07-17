@@ -24,7 +24,7 @@ judge       : cxt -> type.
 spread : judge (C , A) -> (term -> term -> judge C) -> type.
 spread/equal      : spread
                      (`equal (@ A) (@ B) (@ T))
-                     ([x][y] `equal (A x) (B x) (T y)).
+                     ([x][y] `equal (A x) (B y) (T x)).
 
 >> : {C : cxt} judge C -> type. %infix none 2 >> .
 >>/!equal      : nil >> `equal (! N) (! M) (! T)
