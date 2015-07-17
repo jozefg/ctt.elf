@@ -1,9 +1,54 @@
-judge  : type.
-`equal : term -> term -> term -> judge.
-`type  : term -> judge.
+%% Based on Jon Sterling's trick
 
-hjudge   : type.
-functional : term -> (term -> hjudge) -> type.
+cxt : type.
+hterm : cxt -> type.
 
-hjudge/z : judge -> hjudge.
-hjudge/s : {T : term}{f : term -> hjudge} functional T F -> hjudge.
+nil : cxt.
+,   : {C : cxt} hterm C -> cxt. %infix right 3 , .
+
+!   : term -> hterm nil.
+@   : (term -> hterm C) -> hterm (C , A).
+
+
+weaken : {C : cxt} term -> hterm C -> type.
+%mode weaken +A +B -C.
+
+weaken/! : weaken _ T (! T).
+weaken/@ : weaken _ T (@ [x] W)
+            <- weaken _ T W.
+%worlds () (weaken _ _ _).
+%total (T) (weaken T _ _).
+
+judge       : cxt -> type.
+`equal      : hterm C -> hterm C -> hterm C -> judge C.
+`type-equal : hterm C -> hterm C -> judge C.
+
+extrude : judge (C , A) -> (term -> judge C) -> type.
+extrude/equal      : extrude
+                      (`equal (@ A) (@ B) (@ T))
+                      ([x] `equal (A x) (B x) (T x)).
+extrude/type-equal : extrude
+                      (`type-equal (@ A) (@ B))
+                      ([x] `type-equal (A x) (B x)).
+
+spread : judge (C , A) -> (term -> term -> judge C) -> type.
+spread/equal      : spread
+                     (`equal (@ A) (@ B) (@ T))
+                     ([x][y] `equal (A x) (B x) (T y)).
+spread/type-equal : spread
+                     (`type-equal (@ A) (@ B))
+                     ([x][y] `type-equal (A x) (B x)).
+
+>> : {C : cxt} judge C -> type. %infix none 2 >> .
+>>/!equal      : nil >> `equal (! N) (! M) (! T)
+                  <- equal N M T.
+>>/!type-equal : nil >> `type-equal (! N) (! M)
+                  <- type-equal N M.
+>>/@           : C , A >> J
+                  <- extrude J XJ
+                  <- spread J XYJ
+                  <- ({x}{x'} weaken C x x' -> C >> XJ x)
+                  <- ({x}{x'}{y}{y'} weaken C x x'
+                        -> weaken C y y'
+                        -> C >> `equal x' y' A
+                        -> C >> XYJ x y).
