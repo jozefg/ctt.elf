@@ -29,19 +29,20 @@ dec  : term -> (term -> term) -> (term -> term) -> term.
 univ : nat -> term.
 
 canon : type.
-cax   : canon.
 cunit : canon.
 cvoid : canon.
 cpi   : term -> (term -> term) -> canon.
-clam  : (term -> term) -> canon.
 csig  : term -> (term -> term) -> canon.
-cpair : term -> term -> canon.
 ceq   : term -> term -> term -> canon.
-crefl : canon.
 csum  : term -> term -> canon.
+cuniv : nat -> canon.
+
+cax   : canon.
+clam  : (term -> term) -> canon.
+cpair : term -> term -> canon.
+crefl : canon.
 cinl  : term -> canon.
 cinr  : term -> canon.
-cuniv : nat -> canon.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

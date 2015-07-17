@@ -1,0 +1,73 @@
+equalv      : canon -> canon -> canon -> type.
+type-equalv : canon -> canon -> type.
+
+equal       : term -> term -> term -> type.
+type-equal  : term -> term -> type.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+is-equal      : equal M N T
+                 <- M => MV
+                 <- N => NV
+                 <- T => TV
+                 <- equalv MV NV TV.
+is-type-equal : type-equal T T'
+                 <- T => TV
+                 <- T' => TV'
+                 <- type-equalv TV TV'.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+equalv/ax   : equalv cax cax cunit.
+equalv/unit : equalv cunit cunit (cuniv N).
+
+equalv/void : equalv cvoid cvoid (cuniv N).
+
+equalv/pi   : equalv (cpi A B) (cpi A' B') (cuniv N)
+               <- equal A A' (univ N)
+               <- ({x}{y} equal x y A
+                     -> equal (B x) (B' y) (univ N)).
+equalv/lam  : equalv (clam F) (clam G) (cpi A B)
+               <- ({x}{y} equal x y A
+                     -> equal (F x) (G y) (B x)).
+
+equalv/sig  : equalv (csig A B) (csig A' B') (cuniv N)
+               <- equal A A' (univ N)
+               <- ({x}{y} equal x y A
+                     -> equal (B x) (B' y) (univ N)).
+equalv/pair : equalv (cpair L R) (cpair L' R') (csig A B)
+               <- equal L L' A
+               <- equal R R' (B L).
+
+equalv/sum  : equalv (csum A B) (csum A' B') (cuniv N)
+               <- equal A A' (univ N)
+               <- equal B B' (univ N).
+equalv/inl  : equalv (cinl M) (cinl M') (csum A B)
+               <- equal M M' A.
+equalv/inr  : equalv (cinr M) (cinr M') (csum A B)
+               <- equal M M' B.
+
+equalv/eq   : equalv (ceq A B T) (ceq A' B' T') (cuniv N)
+               <- equal A A' T'
+               <- equal B B' T'.
+equalv/refl : equalv crefl crefl (ceq A B T)
+               <- equal A B T.
+
+equalv/univ : equalv (cuniv N) (cuniv N) (cuniv (s N)).
+equalv/cum  : equalv A B (cuniv (s N))
+               <- equalv A B (cuniv N).
+
+type-equalv/unit : type-equalv cunit cunit.
+type-equalv/void : type-equalv cvoid cvoid.
+type-equalv/pi   : type-equalv (cpi A B) (cpi A' B')
+                    <- type-equal A A'
+                    <- ({x}{y} equal x y A
+                          -> type-equal (B x) (B' y)).
+type-equalv/sig  : type-equalv (csig A B) (csig A' B')
+                    <- type-equal A A'
+                    <- ({x}{y} equal x y A
+                          -> type-equal (B x) (B' y)).
+type-equalv/sum  : type-equalv (csum A B) (csum A' B')
+                    <- type-equal A A'
+                    <- type-equal B B'.
+type-equalv/univ : type-equalv (cuniv N) (cuniv N).

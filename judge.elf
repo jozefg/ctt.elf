@@ -1,6 +1,3 @@
-equal   : term -> term -> term -> type.
-is-type : term -> type.
-
 judge  : type.
 `equal : term -> term -> term -> judge.
 `type  : term -> judge.
