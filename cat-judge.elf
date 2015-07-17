@@ -1,8 +1,5 @@
 equalv      : canon -> canon -> canon -> type.
-type-equalv : canon -> canon -> type.
-
 equal       : term -> term -> term -> type.
-type-equal  : term -> term -> type.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -11,10 +8,6 @@ is-equal      : equal M N T
                  <- N => NV
                  <- T => TV
                  <- equalv MV NV TV.
-is-type-equal : type-equal T T'
-                 <- T => TV
-                 <- T' => TV'
-                 <- type-equalv TV TV'.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -52,22 +45,3 @@ equalv/eq   : equalv (ceq A B T) (ceq A' B' T') (cuniv N)
                <- equal B B' T'.
 equalv/refl : equalv crefl crefl (ceq A B T)
                <- equal A B T.
-
-equalv/univ : equalv (cuniv N) (cuniv N) (cuniv (s N)).
-equalv/cum  : equalv A B (cuniv (s N))
-               <- equalv A B (cuniv N).
-
-type-equalv/unit : type-equalv cunit cunit.
-type-equalv/void : type-equalv cvoid cvoid.
-type-equalv/pi   : type-equalv (cpi A B) (cpi A' B')
-                    <- type-equal A A'
-                    <- ({x}{y} equal x y A
-                          -> type-equal (B x) (B' y)).
-type-equalv/sig  : type-equalv (csig A B) (csig A' B')
-                    <- type-equal A A'
-                    <- ({x}{y} equal x y A
-                          -> type-equal (B x) (B' y)).
-type-equalv/sum  : type-equalv (csum A B) (csum A' B')
-                    <- type-equal A A'
-                    <- type-equal B B'.
-type-equalv/univ : type-equalv (cuniv N) (cuniv N).
