@@ -22,11 +22,6 @@ weaken/@ : weaken _ T (@ [x] W)
 judge       : cxt -> type.
 `equal      : hterm C -> hterm C -> hterm C -> judge C.
 
-extrude : judge (C , A) -> (term -> judge C) -> type.
-extrude/equal      : extrude
-                      (`equal (@ A) (@ B) (@ T))
-                      ([x] `equal (A x) (B x) (T x)).
-
 spread : judge (C , A) -> (term -> term -> judge C) -> type.
 spread/equal      : spread
                      (`equal (@ A) (@ B) (@ T))
@@ -36,9 +31,7 @@ spread/equal      : spread
 >>/!equal      : nil >> `equal (! N) (! M) (! T)
                   <- equal N M T.
 >>/@           : C , A >> J
-                  <- extrude J XJ
                   <- spread J XYJ
-                  <- ({x}{x'} weaken C x x' -> C >> XJ x)
                   <- ({x}{x'}{y}{y'} weaken C x x'
                         -> weaken C y y'
                         -> C >> `equal x' y' A
