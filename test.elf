@@ -1,0 +1,8 @@
+%solve D : nil >> `equal (! ax) (! ax) (! unit).
+%solve D : nil >> `equal (! unit) (! unit) (! (univ z)).
+%solve D : nil >> `equal (! (lam [x] x)) (! (lam [x] x))
+            (! (pi (univ z) [x] (univ z))).
+%solve D : nil >> `equal (! (lam [x] x)) (! (lam [x] x))
+            (! (pi unit [x] unit)).
+%solve D : nil >> `equal (! (ap (lam [x] x) (lam [x] x))) (! (lam [x] x))
+            (! (pi unit [x] unit)).

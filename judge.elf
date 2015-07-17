@@ -9,7 +9,6 @@ nil : cxt.
 !   : term -> hterm nil.
 @   : (term -> hterm C) -> hterm (C , A).
 
-
 weaken : {C : cxt} term -> hterm C -> type.
 %mode weaken +A +B -C.
 
